@@ -1,105 +1,118 @@
-import java.util.Objects;
 import java.util.Scanner;
 
-
-class Library{
+class Library {
     String[] availableBooks = new String[6];
     String[] issuedBooks = new String[6];
     Scanner sc = new Scanner(System.in);
-    String book;
-    String iBook;
-    String rBook;
-    void addBook(){
-        System.out.println("Enter the name of the book");
-        book = sc.nextLine();
-        for (int i =0; i<availableBooks.length;i++){
-            if (availableBooks[i]==null){
+
+    void addBook() {
+        System.out.println("Enter the name of the book:");
+        String book = sc.nextLine();
+        for (int i = 0; i < availableBooks.length; i++) {
+            if (availableBooks[i] == null) {
                 availableBooks[i] = book;
-                System.out.println("The book has been added");
-                break;
+                System.out.println("The book has been added.");
+                return;
             }
+        }
+        System.out.println("Library is full, cannot add more books.");
+    }
 
-        }
-    }
-    void issueBook(){
-        System.out.println("Enter the Name of the book you want to issue");
-        iBook = sc.nextLine();
-        for (int i =0; i<availableBooks.length;i++){
-            if (Objects.equals(availableBooks[i], iBook)){
-                for (int j =0; j<issuedBooks.length;j++){
-                    if (issuedBooks[i]==null){
-                        issuedBooks[i] = iBook;
-                        availableBooks[i]= null;
-                        System.out.println("Thank you for issuing the book " + iBook);
-                        break;
+    void issueBook() {
+        System.out.println("Enter the name of the book you want to issue:");
+        String iBook = sc.nextLine();
+        for (int i = 0; i < availableBooks.length; i++) {
+            if (iBook.equals(availableBooks[i])) {
+                for (int j = 0; j < issuedBooks.length; j++) {
+                    if (issuedBooks[j] == null) {
+                        issuedBooks[j] = iBook;
+                        availableBooks[i] = null;
+                        System.out.println("Thank you for issuing the book: " + iBook);
+                        return;
                     }
-                }break;
-            }
-            else {
-                System.out.println("The book is not available");
-                break;
+                }
+                System.out.println("No slot available for issued books.");
+                return;
             }
         }
+        System.out.println("The book is not available.");
     }
-    void returnBook(){
-        System.out.println("Enter the Name of the book you want to return");
-        rBook = sc.nextLine(); int c=0;
-        for (int i =0; i<issuedBooks.length;i++){
-            if (Objects.equals(issuedBooks[i], rBook)){
-                for (int j =0; j<availableBooks.length;j++){
-                    if (availableBooks[i]==null){
-                        availableBooks[i] = rBook;
+
+    void returnBook() {
+        System.out.println("Enter the name of the book you want to return:");
+        String rBook = sc.nextLine();
+        for (int i = 0; i < issuedBooks.length; i++) {
+            if (rBook.equals(issuedBooks[i])) {
+                for (int j = 0; j < availableBooks.length; j++) {
+                    if (availableBooks[j] == null) {
+                        availableBooks[j] = rBook;
                         issuedBooks[i] = null;
-                        System.out.println("Thank you for returning the book");
-
+                        System.out.println("Thank you for returning the book.");
+                        return;
                     }
-                }break;
-            }
-            else {
-                System.out.println("This book does not belong to this library");
-                break;
+                }
+                System.out.println("No slot available for returning books.");
+                return;
             }
         }
+        System.out.println("This book does not belong to this library.");
     }
-    void showAvailableBooks(){
-        System.out.println("Available Books");
-        for (String availableBook : availableBooks) {
-            if (availableBook != null)
-                System.out.printf(availableBook + "\t");
-            else
-                System.out.println("Slot Empty");
+
+    void showAvailableBooks() {
+        System.out.println("Available Books:");
+        boolean empty = true;
+        for (String book : availableBooks) {
+            if (book != null) {
+                System.out.print(book + "\t");
+                empty = false;
+            }
+        }
+        if (empty) {
+            System.out.println("No books available.");
+        } else {
+            System.out.println();
         }
     }
 }
 
 public class PublicLibrary {
     public static void main(String[] args) {
-        int choice=0;
-        Scanner sc= new Scanner(System.in);
         Library obj = new Library();
-        while(choice!=5){
+        Scanner sc = new Scanner(System.in);
+        int choice;
+
+        do {
             System.out.println("Welcome to Public Library");
-            System.out.println("Choose 1 to add a book, 2 for issuing a book, 3 for returning a book , 4 for showing " +
-                    "available books and 5 for exiting the library");
+            System.out.println("1. Add a book");
+            System.out.println("2. Issue a book");
+            System.out.println("3. Return a book");
+            System.out.println("4. Show available books");
+            System.out.println("5. Exit");
+
             choice = sc.nextInt();
-            sc.close();
-            if (choice == 1) {
-                obj.addBook();
-            }
-            else if (choice == 2) {
-                obj.issueBook();
-            }
-            else if (choice == 3) {
-                obj.returnBook();
-            }
-            else if (choice == 4) {
-                obj.showAvailableBooks();
-            }
-            else if (choice == 5) {
-                break;
-            }
-        }
+            sc.nextLine(); // Consume newline
 
+            switch (choice) {
+                case 1:
+                    obj.addBook();
+                    break;
+                case 2:
+                    obj.issueBook();
+                    break;
+                case 3:
+                    obj.returnBook();
+                    break;
+                case 4:
+                    obj.showAvailableBooks();
+                    break;
+                case 5:
+                    System.out.println("Exiting the library.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter a number between 1 and 5.");
+            }
+        } while (choice != 5);
 
+        sc.close(); // Close the scanner at the end of the program
     }
 }

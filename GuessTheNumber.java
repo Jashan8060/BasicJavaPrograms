@@ -1,50 +1,53 @@
 import java.util.Random;
 import java.util.Scanner;
 
-class Game{
+class Game {
     int computer;
     int user;
-    int noOfGuesses=0;
+    int noOfGuesses = 0;
     boolean isCorrectNumber = false;
-    public void setNoOfGuesses(){
-        noOfGuesses+=1;
+
+    public void incrementNoOfGuesses() {
+        noOfGuesses += 1;
     }
-    public void getNoOfGuesses(){
+
+    public void displayNoOfGuesses() {
         System.out.println("The number of Guesses is " + noOfGuesses);
     }
+
     Game() {
         Random number = new Random();
-        computer = number.nextInt(0,5);
+        computer = number.nextInt(5); // Generates a random number between 0 and 4
     }
-    public void takeUserInput(){
+
+    public void takeUserInput() {
         Scanner sc = new Scanner(System.in);
         user = sc.nextInt();
-        
     }
-    public void isCorrectNumber(){
-        if(computer == user){
-            System.out.println("Congratulations You won");
-            isCorrectNumber = true;
 
-        }
-        else {
+    public void checkIfCorrectNumber() {
+        if (computer == user) {
+            System.out.println("Congratulations! You won.");
+            isCorrectNumber = true;
+        } else {
+            System.out.println("Try again.");
             isCorrectNumber = false;
         }
     }
 }
+
 public class GuessTheNumber {
     public static void main(String[] args) {
         Game game = new Game();
-        System.out.println("Choose a number");
-        game.takeUserInput();
-        while (!game.isCorrectNumber){
-            game.isCorrectNumber();
-            game.setNoOfGuesses();
-            if(!game.isCorrectNumber)
-                break;
-            System.out.println("Try again");
+        System.out.println("Choose a number between 0 and 4:");
+        
+        // Continue prompting until the user guesses the correct number
+        do {
             game.takeUserInput();
-        }
-        game.getNoOfGuesses();
+            game.checkIfCorrectNumber();
+            game.incrementNoOfGuesses();
+        } while (!game.isCorrectNumber);
+
+        game.displayNoOfGuesses();
     }
 }
